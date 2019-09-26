@@ -1,4 +1,4 @@
-function [] = Ex5()
+function [] = Ex6()
 x = 0.8:0.01:2
 n = rand(121)*0.1;
 n = n(1,:);
