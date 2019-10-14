@@ -41,7 +41,7 @@ for i=1:row
         end
         if ~((currmin<x1(i,j)) && (x1(i,j)<currmax))
             x2(i,j) = currmean;
-            f(i,j)=1;  
+            f(i,j)=1;  % f=1,stands for noise.
         end
     end
 end
