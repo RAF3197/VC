@@ -1,0 +1,4 @@
+X = imread('img2.jpeg');
+Y = rgb2gray(X);
+Y = (Y,"salt & pepper",0.1);
+z = colfilt(Z,[5 5]
