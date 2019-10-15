@@ -1,4 +1,6 @@
-function [outputArg1,outputArg2] = EX3(inputArg1,inputArg2)
+function [out] = EX3(I)
+G = imgradient(I,'Sobel');
+out =double( I) -double( G);
 
 end
 
