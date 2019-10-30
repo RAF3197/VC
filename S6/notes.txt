@@ -1,0 +1,54 @@
+HSV = rgb2hsv(I);
+H = HSV(:,:,1);
+S = HSV(:,1,:);
+V = HSV(1,:,:);
+SB = (S> 5/100) & (S<30/100);
+VB = (V > 10/100) & (V < 50/100);
+BW = (HB && SB && VB);
+BW = HB & SB & VB;
+
+C = bwconncomp(BW);
+J = I;
+J (C.PixelIdxList(1)) = 0; -> borra la primera moneda
+
+M = zeros(480,640);
+M(C.PixelIdxList(3)) = 1;
+J = I +I .* uint8(M); -> contrastem
+imshow(J);
+S = regionprops(C, 'centroid'); -> suma les coordenades i les dividex pel nº de pixels -> calcula el centre
+
+S = regionprops(C, 'centroid', 'Area', 'BoundingBox');
+
+KMEANS
+======
+kmeans: classifica una serie d'observacions
+només funciona amb doubles!!
+C = kmeans(x,k); x->observacions
+                 k->nº de clases
+    ->observacions classificades (1...K)
+
+fluorescent_cell -> imatge de celules tratades amb colors (nucli, etc)
+I = imread('');
+R = I(:,:,1);
+G = I(:,:,2);
+B = I(:,:,3);
+O = [R(:), G(:), B(:)];
+C = kmeans(double(O), 3);
+
+(IC significa imatge classificada)
+IC = reshape(C, 600,800);
+imshow(IC, []);
+
+exercicis
+========
+1. imagina que estàs en una comprobadora d'una linea de producció. Volem saber si l'objecte que passa te les mides correctes. Busca tu el llindar per a que et doni els pixels binaritzats.
+Comencem amb binarització dels grisos. Vui un nivell de pixels de grisos, per exemple el 5%. cerca massiva? no. cerca dicotomica? no
+calcular histograma, per saber quin és el tan per cent dels pixels i deixarlos a 1. Histograma acumulat.
+Com saber que s'ha calculat bé?  per exemple, una imatge amb 12 pastilles. calcular el radi en píxels de la pastilla i calcular l'area de les pastilles a través de 12*pi*radi^2. D'aquesta manera treiem el % dels pixels que volem de blanc (are pastilles / area total).
+
+2
+Finestra lliscant que calcula la mitjana i tots els pixels foscus per sota de la mitjana es posi a 1. D'aquesta manera binaritzarà les lletres. Per aquesta és millor una finestra alta que cuadrada.
+
+3
+onion.png. aquí veiem que hi ha un color vermell, verd i groc. Pintar la imatge en 5 tintes. Aplicar kmeans. si faig Kmeans amb K = 4, em classificará amb la tinta que s'ha d'aplicar. Es pot fer amb rgb, pero aconsejo fero amb hsv. Amb rgb es chungo perque hi han vermells, verds i grocs.
+problema del hiu-> vermell és tant 0º com 360º. S'arregla enlloc de dirli amb hew només l'angle, dirle amb cos(H) i sin(H)
