@@ -1,0 +1,77 @@
+SE = ones(3,3);
+IF = imfilter(BW, SE);
+E = IF==9;
+
+
+I = imread('coins.png');
+BW = I > 100;
+SE = strel('disk', 3);
+D = imdilate(BW, SE);
+imshow(D);
+C = imclose(BW, SE);
+imshow(C);
+DC = C & not(imerode(C,SE)); -> retorna el contorn de les monedes
+
+S = bwmorph(C, 'skel', Inf); -> fa el esquelet
+
+S = bemorph(C,'shrink', Inf); -> retorna els centres de les monedes
+%tornar a emplenar les monedes
+S = bwmorph(MF, 'fill');
+imshow(S);
+
+IR = imreconstruct(im_marques, BW);
+S = bwmorph(C, 'shink', Inf);
+imshow(S);
+CR = imreconstruct(S, not(MF));
+IF = CR | MF; -> reconstrulleix les monedes
+
+%monedes foradades
+F = imdilate(S, SE);
+MF = xor(C, F);
+imshow(MF);
+
+IMI = logical(zeros(size(I)));
+IM(1, 1) = 1;
+CR = imreconstruct(IM, not(MF));
+imshow(CR);
+
+transformada de la distancia
+tenim dos objectes: un cuadrat i un triangle. El que em dirà la transformada de la distancia quina es la menor distancia de dun pixels fins al objecte més proxim. Ho fa a través d'un proces on es va colocant valors des del objecte fins a cualsevol pixel.
+DT = bwdist(C, 'euclidea');
+imshow(DT, []);
+
+%gra d'arros
+BW = imread('rice.png');
+DT = bwdist(BW, 'euclidea');
+h = fspecial('gaussian', 5);
+DT = imfilter(DT, h);
+BA = DT > 2;
+imshow(BA);
+
+watershed
+s'hagafa la imatge i es gira, de tal manera que els arrosos queden des de la vista lateral. La base negre es 0 i els arrosos son < 1. fa l'efecte d'implir aigua i si hi ha dos arrosos junts, al anar omplint d'aigua arribarà un moment en que es toquen. Llavors quan això passa s'avisa.
+què passa per les altres zones on no hi han arròs? fer pous més grans
+DT(DT==0) = -Inf;
+%ara ja podem aplicar el watershed
+WS = watershed(DT);
+RGB = label2rgb(WS);
+imshow(RGB);
+
+%wtf
+I = imread('rice.png');
+BW = I< 115;
+DT = bwdist(BW, 'euclidea');
+h = fspecial('gaussian', 5);
+DT = imfilter(DT, h);
+
+
+DT = DT .* BA;
+
+
+primer exercici:
+contar les dents d'una roda dentada. usar la función conectedcomponents. Com es separen les dents? Erosió + dilatació ens queda la roda. Restem i ens queda les dents. imfild per a omplir forats.
+
+segon:
+segmentar celules vermelles. Dona igual les celules de les voreres, les podem contar o no. Trobar el centre de les celules i possar una creu. 
+
+tercer: un sistema automatic que succioni una celula. Quina celula? la que estigui més aillada. Tranfosrmada de distància i fer el màxim. Enginy de veure
