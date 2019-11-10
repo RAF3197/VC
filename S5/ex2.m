@@ -1,6 +1,7 @@
-function [O] = ex2(I, N, k)
-    I = rgb2gray(I);
-    O = nlfilter(I, [N 3], @ex2filter, k); 
+function [] = Ex2(m,n,k)
+I = imread('Enters.jpg');
+I = rgb2gray(I);
+I = uint8(colfilt(I,[m n],'sliding',@bin_local,k));
+imshow(I);
 end
-
 
