@@ -7,10 +7,10 @@ for i = 1:cols
     column = win(:,i);
     Average = mean(column);
     pixel = column(pixels);
-    if(pixel*k >= Average)
-        P(i) = 0;
-    else
+    if(pixel-k >= Average)
         P(i) = 255;
+    else
+        P(i) = 0;
     end
 end
 end
