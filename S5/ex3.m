@@ -1,5 +1,5 @@
 function [] = ex3(k)
-I = imread('normal-blood1.jpg');
+I = imread('hort-mix-780.jpg');
 tam = size(I);
 R = I(:,:,1);
 G = I(:,:,2);

@@ -1,0 +1,23 @@
+function [] = lab7()
+    I1 = imread('dna-14.png');
+    I2 = imread('dna-18.png');
+    I3 = imread('dna-26.png');
+    I4 = imread('dna-38.png');
+    
+     figure;
+      h    = [];
+      h(1) = lab7sol(I1);
+      h(2) = subplot(2,2,2);
+      h(3) = subplot(2,2,3);
+      h(4) = subplot(2,2,4);
+ 
+    
+      
+    imshow(lab7sol(I1)); figure;
+    imshow(lab7sol(I2));figure;
+        imshow(lab7sol(I3));figure;
+
+            imshow(lab7sol(I4));
+
+end
+
