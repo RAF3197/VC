@@ -33,9 +33,9 @@ total = statsValue1 + statsValue2 + statsValue3 + statsValue4 + statsValue5 + st
 total = normalize(total, 'range');
 
 testI = imread('Joc_de_caracters.jpg');
-testI = rgb2gray(testI);
-testR = flipdim(testI ,1);
-imshow(testR);
+testR = rgb2gray(testI);
+testR = flipdim(testR ,1);
+%imshow(testR);
 BW = testR < 50;
 components = bwconncomp(BW);
 statsR = regionprops(components,'all');
@@ -67,10 +67,13 @@ totalRes = statsValueRes1 + statsValueRes2 + statsValueRes3 + statsValueRes4 + s
     
 totalRes = normalize(totalRes, 'range');
 
-res = totalRes-total
-res2 = abs(abs(total(12)) - abs(totalRes(1)))
+total
+totalRes
 
 
-
-%Comparar
+for i = 1:30
+    for j=1:30
+        matrixRes(i,j) = abs(total(i)-total(j));
+    end
+end
 end
