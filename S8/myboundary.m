@@ -1,10 +1,18 @@
 function [] = myboundary(I)
     % simplified polygonal boundary of a BW image
-    imshow(I); pause(1);
     BW = rgb2gray(I) < 168;
+    imshow(BW); pause(1);
     CC = bwconncomp(BW);
     idxlists = CC.PixelIdxList;
-    pixels = idxlists{1};
+    
+    stats = regionprops(CC,'all');
+    for (i = 1:30)
+        1 - stats(i).EulerNumber
+    end
+    
+    %1 és la posició dels caracters que ha trobat
+    pixels = idxlists{3};
+    
     [F,C] = ind2sub(size(BW), pixels);
     % exterior boundary
     k = boundary([F,C],1); % loose factor  
