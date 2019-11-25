@@ -73,16 +73,10 @@ totalRes
 
 for i = 1:30
     minI = 99;
-    minJ = 99;
-    totalMin = 99;
+    minX
     for j=1:30
-        if abs(total(i)-totalRes(j)) < totalMin
-            minI = i;
-            minJ = j;
-            totalMin = abs(total(i)-totalRes(j));
-        end
+        matrixRes(i,j) = abs(total(i)-totalRes(j));
     end
-    matrixRes(minI,minJ) = 1;
 end
 imagesc(matrixRes);
 end
