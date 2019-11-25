@@ -26,7 +26,8 @@ statsValue6 = normalize(statsValue6, 'range');
 statsValue7 = normalize(statsValue7, 'range');
 statsValue8 = normalize(statsValue8, 'range');
 
-total = statsValue1 + statsValue2 + statsValue3 + statsValue4 + statsValue5 + statsValue6 + statsValue7 + statsValue8;
+total = statsValue1 + statsValue2 + statsValue3 + statsValue4 + statsValue5
+    + statsValue6 + statsValue7 + statsValue8;
     
 %total = statsValue6;
     
@@ -67,7 +68,7 @@ totalRes = statsValueRes1 + statsValueRes2 + statsValueRes3 + statsValueRes4 + s
     
 totalRes = normalize(totalRes, 'range');
 
-res = totalRes-total
+res = totalRes-total;
 res2 = abs(abs(total(12)) - abs(totalRes(1)))
 
 
