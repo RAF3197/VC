@@ -67,4 +67,8 @@ F = fitcecoc(total,Y);
 totalRes = totalRes'
 Yp = predict(F,totalRes);
 confusionchart(Y,Yp)
+
+%busquem un rectangle amb el aspect ratio de la matricula, la retallem (fem
+%un crop), la invertim i fem connectedcomponents. Si hem trobat menys de 7
+%elements, descartar
 end

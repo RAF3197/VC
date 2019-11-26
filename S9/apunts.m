@@ -23,6 +23,7 @@ function [] = apunts()
     %lector de matricules-> fer un binaritzat local de 50x50. Matlab en té
     %un, adaptTreshold. La pasem i la binaritzem
     
+    I imread('mat1.jpg');
     I = rgb2gray(spanish_vehicle)
     I = medfilt2(I,[5 5]);
     M = colfilt(I, [50 50], 'sliding', @mean);
