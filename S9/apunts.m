@@ -22,13 +22,21 @@ function [] = apunts()
     
     %lector de matricules-> fer un binaritzat local de 50x50. Matlab en té
     %un, adaptTreshold. La pasem i la binaritzem
+    %connected components, regionprops, bondingbox i buscar la relació
+    %d'amplada i alçada. 
+    %Et pot donar un numero dient cuant de segur està de la predicció. 
+    %[Yp,score] = predict(NF,X);
     
-    I imread('mat1.jpg');
-    I = rgb2gray(spanish_vehicle)
+    I = imread('mat1.jpg');
+    I = rgb2gray(I);
     I = medfilt2(I,[5 5]);
     M = colfilt(I, [50 50], 'sliding', @mean);
     BW = I > M + 16;
     imshow(BW);
+    i = 0;
+    if (i==0 || i==3)
+    end
+    
     
     
 end
