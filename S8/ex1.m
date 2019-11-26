@@ -5,7 +5,8 @@ BW = IB < 50;
 components = bwconncomp(BW);
 stats = regionprops(components,'all');
 
-%aqui hem de normalitzar ->  Mirant com es fa 
+%Agafem descriptors i normalitzem 
+
 for i = 1:size(stats)
     statsValue1(i) = 1-stats(i).EulerNumber;
     statsValue2(i) = stats(i).Extent;
@@ -28,17 +29,16 @@ statsValue8 = normalize(statsValue8, 'range');
 
 total = statsValue1 + statsValue2 + statsValue3 + statsValue4 + statsValue5 + statsValue6 + statsValue7 + statsValue8;
     
-%total = statsValue6;
-    
 total = normalize(total, 'range');
 
 testI = imread('Joc_de_caracters.jpg');
 testR = rgb2gray(testI);
 testR = flipdim(testR ,1);
-%imshow(testR);
+
 BW = testR < 50;
 components = bwconncomp(BW);
 statsR = regionprops(components,'all');
+
 %Normalitzar 
 
 for i = 1:size(stats)
@@ -63,12 +63,8 @@ statsValueRes8 = normalize(statsValueRes8, 'range');
 
 totalRes = statsValueRes1 + statsValueRes2 + statsValueRes3 + statsValueRes4 + statsValueRes5 + statsValueRes6 + statsValueRes7 + statsValueRes8;
 
-%totalRes = statsValueRes1 + statsValueRes6;
     
 totalRes = normalize(totalRes, 'range');
-
-total
-totalRes
 
 
 for i = 1:30
