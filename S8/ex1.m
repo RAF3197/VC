@@ -2,11 +2,11 @@ function [] = ex1()
 I = imread('Joc_de_caracters.jpg');
 IB = rgb2gray(I);
 BW = IB < 50;
+imshow(BW);
 components = bwconncomp(BW);
 stats = regionprops(components,'all');
 
-%Agafem descriptors i normalitzem 
-
+%aqui hem de normalitzar ->  Mirant com es fa 
 for i = 1:size(stats)
     statsValue1(i) = 1-stats(i).EulerNumber;
     statsValue2(i) = stats(i).Extent;
@@ -31,14 +31,15 @@ total = statsValue1 + statsValue2 + statsValue3 + statsValue4 + statsValue5 + st
     
 total = normalize(total, 'range');
 
-testI = imread('Joc_de_caracters.jpg');
+testI = imread('Joc_de_caracters_deformats.jpg');
 testR = rgb2gray(testI);
-testR = flipdim(testR ,1);
-
-BW = testR < 50;
+%testR = flipdim(testR ,1);
+%imshow(testR);
+figure;
+BW = testR < 50
+imshow(BW);
 components = bwconncomp(BW);
 statsR = regionprops(components,'all');
-
 %Normalitzar 
 
 for i = 1:size(stats)
@@ -63,9 +64,9 @@ statsValueRes8 = normalize(statsValueRes8, 'range');
 
 totalRes = statsValueRes1 + statsValueRes2 + statsValueRes3 + statsValueRes4 + statsValueRes5 + statsValueRes6 + statsValueRes7 + statsValueRes8;
 
+%totalRes = statsValueRes1 + statsValueRes6;
     
 totalRes = normalize(totalRes, 'range');
-
 
 for i = 1:30
     minI = 99;
@@ -80,5 +81,6 @@ for i = 1:30
     end
     matrixRes(minI,minJ) = 1;
 end
+figure;
 imagesc(matrixRes);
 end
