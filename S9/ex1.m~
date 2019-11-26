@@ -8,10 +8,7 @@ function [] = ex1()
     CC = bwconncomp(BW);
     Matricules = regionprops(CC,'BoundingBox');
     for i = 1:size(Matricules)
-        Matricula = Matricules(i).BoundingBox;
-        if Matricula(3) / Matricula(4) >= 3 && Matricula(3) / Matricula(4) <= 5
-            Matricula(1)
-            Matricula(2)
+        if Matricules(i).width / Matricules(i).height >= 3 and 
         end
     end
 end
