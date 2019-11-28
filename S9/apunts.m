@@ -32,6 +32,7 @@ function [] = apunts()
     I = medfilt2(I,[5 5]);
     M = colfilt(I, [50 50], 'sliding', @mean);
     BW = I > M + 16;
+    BW.drawrectangle('Position',[10,10,100,100],'Color',[1 0 0]);
     imshow(BW);
     i = 0;
     if (i==0 || i==3)

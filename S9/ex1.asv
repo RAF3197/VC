@@ -7,11 +7,15 @@ function [] = ex1()
     %imshow(BW);
     CC = bwconncomp(BW);
     Matricules = regionprops(CC,'BoundingBox');
+    hold on;
     for i = 1:size(Matricules)
         Matricula = Matricules(i).BoundingBox;
         if Matricula(3) / Matricula(4) >= 3 && Matricula(3) / Matricula(4) <= 5
             Matricula(1)
             Matricula(2)
+            
+            % Then, from the help:
+            rectangle('Position',[10,10,100,100], 'Edgecolor', 'r');
         end
     end
 end
