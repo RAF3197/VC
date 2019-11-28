@@ -27,7 +27,7 @@ function [] = numbers(matricula_posible)
     statsValue8 = normalize(statsValue8, 'range');
     
     total = statsValue1 + statsValue2 + statsValue3 + statsValue4 + statsValue5 + statsValue6 + statsValue7 + statsValue8;
-        
+
     total = normalize(total, 'range');
     
     matricula_posible = matricula_posible < 70;
@@ -53,7 +53,6 @@ function [] = numbers(matricula_posible)
         ar = height/width;
         if ar > 1.5 && ar <= 4 && height>10
             rectangle('Position',[left, top, width, height], 'Edgecolor', 'r');
-            ar
             statsValueRes1(count) = 1-statsR(i).EulerNumber;
             statsValueRes2(count) = statsR(i).Extent;
             statsValueRes3(count) = statsR(i).MajorAxisLength;

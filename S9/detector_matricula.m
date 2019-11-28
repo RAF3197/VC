@@ -1,6 +1,6 @@
 function [] = detector_matricula(I)
     I = rgb2gray(I);
-    I = medfilt2(I,[5 5]);
+    %I = medfilt2(I,[5 5]);
     M = colfilt(I, [50 50], 'sliding', @mean);
     BW = I > M + 16;
     imshow(BW);
