@@ -3,18 +3,16 @@ function [] = numbers(matricula_posible)
     IB = rgb2gray(I);
     BW = IB < 50;
     components = bwconncomp(BW);
-    stats = regionprops(components,'all');
+    stats = regionprops(components,'eulernumber','extent','majoraxislength','area','perimeter','solidity','Eccentricity');
     
-        weight_1 = 0.15;
+    weight_1 = 0.3;
     weight_2 = 0.05;
-    weight_3 = 0.000;
-    weight_4 = 0.000;
-    weight_5 = 0.000;
+    weight_3 = 0;
+    weight_4 = 0;
+    weight_5 = 0;
     weight_6 = 0.35;
-    weight_7 = 0.1;
-    weight_8 = 0.1;
-
-
+    weight_7 = 0.2;
+    weight_8 = 0.09;
     
     Y = ['0';'1';'2';'3';'4';'5';'6';'7';'8';'9';'B';'C';'D';'F';'G';'H';'J';'K';'L';'M';'N';'P';'R';'S';'T';'V';'W';'X';'Y';'Z'];
 
@@ -50,7 +48,7 @@ function [] = numbers(matricula_posible)
     
     matricula_posible = matricula_posible < 70;
     components = bwconncomp(matricula_posible);
-    statsR = regionprops(components,'all');
+    statsR = regionprops(components,'eulernumber','extent','majoraxislength','area','perimeter','solidity','Eccentricity','boundingbox');
     %Normalitzar 
     
     if size(statsR)<7
@@ -103,8 +101,12 @@ function [] = numbers(matricula_posible)
     for i = 1:size(count)
     end
     
+    
     totalRes = statsValueRes1 + statsValueRes2 + statsValueRes3 + statsValueRes4 + statsValueRes5 + statsValueRes6 + statsValueRes7 + statsValueRes8;
     totalRes = statsValueRes1*weight_1+statsValueRes2*weight_2+statsValueRes3*weight_3+statsValueRes4*weight_4+statsValueRes5*weight_5+statsValueRes6*weight_6+statsValueRes7*weight_7+statsValueRes8*weight_8;
+    
+  
+    
     
     %totalRes = normalize(totalRes, 'range');
     
