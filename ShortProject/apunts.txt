@@ -1,0 +1,11 @@
+segmentació semi automatica
+s'usuari selecciona manualment amb el ratolí. L'output seria la imatge segmentada a nivell de pixel. Amb una imatge similar hauria de saber detectar on està la vaca. No obsesionarse en ferse perfecte. Es valorarà lo critics que som amb nosaltres mateixos. Evaluar el que estem fent.
+Analitzar les significàncies de les característiques. Justificar si realment cal un vector de X o Y característiques. Sintonització de les funcions: si trobem una funció per internet, saber com està feta i jugar amb els parametres, no utilitzarlos a boleo. Ignorar biografia, per itnernet amb "object segmentation" surten més coses.
+Com fer-ho:
+Hi han moltes maneres de fer-ho. La manera més sencilla és:
+un cop  seleccionada la capsa, segmentar la vaca: contorn exterior de la baca binaritxzada. Com ho fem? hi ha una cosa que es diu background (B) i una altra foreground (F). Agafem una finestra d'una certa mida (la gespa té varios nivells de color) on extreiem la textura i el color. Per color volem dir coocorrencia, matriu de coocurrencies -> què passa amb què, quin color va amb quin. Per la textura ens referim al p.e histograma de gradients (HOG)... Per una altra banda, la finestra té que anar d'acord amb el tamany de la imatge.
+Montar característiques de la finestra 1, finestra 2, 3... per a cada finestra diem si es B o F. Amb aquesta taula tenim un clasificador que donada la x em donarà la y. Ara agafo aquest predictor i el passo per la imatge sencera i ens dirà que tota la part que no ha seleccionat l'usuari serà background. Si hi ha cel i gespa, al estar fora de la finestra el classificador sabrà que el blau i el verd correspon al background. Llavors tindrem moltes observacions que son del background i algunes que son del foreground. Tindrem alguna aproximació que es de la vaca i lo més difícil serà afinar a nivell de píxel, ja que quan la finestra està a nivell del contorn de la vaca no sabrà decidir. Podem ferho analitzant els pixels veins.
+Mirar la programació, hi ha un checkpoint la última setmana, que val el 20% de la nota.
+Només hi haurà un objecte dins del cuadre del usuari.
+
+es pot fer servir colfilter? aquesta pot anar de bloc en bloc: 'distinct'-> fes de 10 en 10 pixels per anar depressa.

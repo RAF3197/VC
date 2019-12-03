@@ -18,6 +18,7 @@ function [] = detector_matricula(I)
         if ar > 3 && ar < 5 && width > 50
             rectangle('Position',[left, top, width, height], 'Edgecolor', 'r');
             I2 = imcrop(I,[left, top, width, height]);
+            
             numbers(I2);
         end
     end
