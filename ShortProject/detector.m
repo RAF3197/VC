@@ -41,9 +41,29 @@ function [] = detector(I)
         end
     end
     
+    for i=1:size(blueChannel)
+        if (i>=userBox(1) || i<=userBox(3)-userBox(1))
+            for j=1:size(blueChannel(i))
+                if (j>=userBox(2) || j<=userBox(4)-userBox(2))
+                    blueBack(i ,j) = 0;
+                end
+            end
+        end
+    end
     
-    figure;
-    imshow(redBack);
+    for i=1:size(greenChannel)
+        if (i>=userBox(1) || i<=userBox(3)-userBox(1))
+            for j=1:size(greenChannel(i))
+                if (j>=userBox(2) || j<=userBox(4)-userBox(2))
+                    greenBack(i ,j) = 0;
+                end
+            end
+        end
+    end
+    
+    %HOG
+    
+    %Histogrames Color
     
     %M = ~h.createMask();
     %I(M) = 0;
