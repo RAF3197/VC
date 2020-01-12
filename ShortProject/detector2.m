@@ -13,6 +13,8 @@ imshow(I);
     [ygreen,x] = imhist(green);
     [yblue,x] = imhist(blue);
     plot(x, yred, 'Red', x, ygreen, 'Green', x, yblue, 'Blue');
+    Histo = hist3(I);
+    plot(Histo);
     %Apliquem HOG
     crop = imcrop(I,userBox);
     figure;
