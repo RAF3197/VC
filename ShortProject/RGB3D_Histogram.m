@@ -13,7 +13,7 @@ clc
 clear all
 close all
 %% Read Image
-I    = imread('test.jpg');
+I    = imread('cow1.jpg');
 figure(); imshow(I)                                       % Show Image & Wait Till Get Rect
 IR   = round(getrect(figure(1)));                         % Select a Region
 close 1

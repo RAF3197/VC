@@ -6,21 +6,19 @@ imshow(I);
     rectangle('Position', userBox, 'Edgecolor', 'r');
     %Background vs Foreground
     %si esta dins de la seleccio Foreground, si esta fora Background
-    [rows,cols,color] = size(I);
-    color
-    %celes de 15x15     
-    IM = imresize(I,[512,512]);
-    cells = mat2cell(IM,4,4,3);
-    imshow(cells);
+    [rows,cols] = size(I);
+    %celes de 15x15 
+    figure;
     for i = 1:rows
         for j = 1:cols
             if ((i<userBox(1)<= i && j<=userBox(2)) || (i>=userBox(1) + userBox(3) && j>=userBox(2)+userBox(4)))
                 %Backgroud
-                
+                hold on;
+                imshow(I(i,j));
             else
                 %Foreground
-                
             end
+                
         end
     end
     %Histograma de color 
