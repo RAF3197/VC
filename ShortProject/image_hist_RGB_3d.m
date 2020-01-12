@@ -1,4 +1,4 @@
-function [freq, freq_emph, freq_app] = image_hist_RGB_3d(imname,n,gamma)
+function [freq, freq_emph, freq_app] = image_hist_RGB_3d(im,n,gamma)
 
 % Creates 3D-histogram from an RGB image
 % in the form of balls in the RGB cube
@@ -55,7 +55,7 @@ end
 disp('Starting...')
 disp('Reading the image...');
 
-im = imread(imname);    % loading the image
+%im = imread(imname);    % loading the image
 s = size(im);
 im = double(im);
 

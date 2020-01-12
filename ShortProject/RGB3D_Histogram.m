@@ -9,19 +9,20 @@
 % 2013
 % Questions regarding the code may be directed to alireza.asvadi@gmail.com
 
-clc
-clear all
-close all
+%clc
+%clear all
+%close all
+function[S] = RGB3D_Histogram(I)
 %% Read Image
-I    = imread('cow1.jpg');
+%I    = imread('cow1.jpg');
 figure(); imshow(I)                                       % Show Image & Wait Till Get Rect
 IR   = round(getrect(figure(1)));                         % Select a Region
 close 1
 IM   = I(IR(2):IR(2)+IR(4),IR(1):IR(1)+IR(3),:);
 figure(); imshow(IM)   
 %% QUANTIZATION
-B     = 8;                                                % Number of Bins
-Q     = 256/B;                                            % Quantization
+B     = 32;                                                % Number of Bins
+Q     = 1024/B;                                            % Quantization
 SI    = (floor(double(IM)/Q))+1;                          % Quantized & Indexed Image [1 ~ Bin]
 %% HISTOGRAM
 H     = zeros(B,B,B);                                     % Object Histogram
@@ -49,3 +50,4 @@ axis([1 B 1 B 1 B]);
 xlabel('Red.Bins')
 ylabel('Green.Bins')
 zlabel('Blue.Bins')
+end
