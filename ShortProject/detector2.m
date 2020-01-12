@@ -9,11 +9,15 @@ imshow(I);
     [rows,cols,color] = size(I);
     color
     %celes de 15x15     
-    IM = imresize(I,[512,512]);
-    cells = mat2cell(IM,4,4,3);
-    imshow(cells);
-    for i = 1:rows
-        for j = 1:cols
+    IM = imresize(I,[1024,1024]);
+    cells = mat2tiles(IM,[32,32]);
+    cells(1,1)
+    hog = extractHOGFeatures(cells{1,1});
+    [cellRows,cellCols] = size(cells);
+    %re = reshape(cells,[512,512]);
+    %image(cells)
+    for i = 1:cellRows
+        for j = 1:cellCols
             if ((i<userBox(1)<= i && j<=userBox(2)) || (i>=userBox(1) + userBox(3) && j>=userBox(2)+userBox(4)))
                 %Backgroud
                 
