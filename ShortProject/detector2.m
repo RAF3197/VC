@@ -10,7 +10,7 @@ imshow(I);
     color
     %celes de 15x15     
     IM = imresize(I,[1024,1024]);
-    cells = mat2tiles(IM,[32,32]);
+    cells = mat2tiles(IM,[16,16]);
     cells(1,1)
     hog = extractHOGFeatures(cells{1,1});
     [cellRows,cellCols] = size(cells);
