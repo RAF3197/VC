@@ -5,7 +5,7 @@ if (size(I, 3) ~= 3)
     error('rgbhist:numberOfSamples', 'Input image must be RGB.')
 end
 
-nBins = 256;
+nBins = 1;
 
 rHist = imhist(I(:,:,1), nBins);
 gHist = imhist(I(:,:,2), nBins);
@@ -24,4 +24,5 @@ rgbH = zeros(3,256);
 rgbH(1,:) = h(1);
 rgbH(2,:) = h(2);
 rgbH(3,:) = h(3);
+rgbH = ((h(1)+h(2)+h(3))/3);
 end
