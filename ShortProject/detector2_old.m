@@ -9,27 +9,27 @@ function [] = detector2(I)
     [rows,cols,color] = size(I);
     color
     %celes de 15x15     
-    IM = imresize(I,[4096,4096]);
-    cells = mat2tiles(IM,[64,64]);
+    IM = imresize(I,[2048,2048]);
+    cells = mat2tiles(IM,[32,32]);
     cells(1,1)
     hog2 = extractHOGFeatures(cells{1,1});
     [cellRows,cellCols] = size(cells);
     %re = reshape(cells,[512,512]);
     %image(cells)
     %figure;
-    labels = zeros(1,64*64);
+    labels = zeros(1,32*32);
     x = 1;
    [hogRows,hogCols] =  size(hog2);
-    hog = zeros(64*64,hogCols);
-    labels = repelem("Background",64*64);
+    hog = zeros(32*32,hogCols);
+    labels = repelem("Background",32*32);
     %[freq, freq_emph, freq_app] = image_hist_RGB_3d(cells{1,1});
    % rgb = histRGB(cells{1,1});
-    rgbHisto = zeros(64,64);
+    rgbHisto = zeros(32,32);
     for i = 1:cellRows
         for j = 1:cellCols
-            if ((i<=userBox(1) && j<=userBox(2)) || (i>=userBox(1) + userBox(3) && j>=userBox(2)+userBox(4)))
+            if ((i<userBox(1) && j<=userBox(2)) || (i>=userBox(1) + userBox(3) && j>=userBox(2)+userBox(4)))
                 %Backgroud
-                if((i*64<=userBox(1) && j*64<=userBox(2)) || (i*64>=userBox(1) + userBox(3) && j*64>=userBox(2)+userBox(4)))
+                if((i*32<userBox(1) && j*32<=userBox(2)) || (i*32>=userBox(1) + userBox(3) && j*32>=userBox(2)+userBox(4)))
                     %Background
                     labels(x) = "Background";
                     hog(x,:) = extractHOGFeatures(cells{i,j});
@@ -37,27 +37,13 @@ function [] = detector2(I)
                     %rgbHisto(i,j) = RGBhistogram(cells{i,j});
 %                    imshow(cells{i,j});
                 else
-                    %Si Tile no esta sancera fora de la selecio, veiem si
-                    %la majoria esta dins o fora
-                    if((i*32<=userBox(1) && j*32<=userBox(2)) || (i*32>=userBox(1) + userBox(3) && j*32>=userBox(2)+userBox(4)))
-                        %Background
-                    labels(x) = "Background";
-                    hog(x,:) = extractHOGFeatures(cells{i,j});
-                    x = x + 1;
-                    %rgbHisto(i,j) = RGBhistogram(cells{i,j});
-%                    imshow(cells{i,j});
-                    else
                     %Foreground
                     labels(x) = "Foreground";
                     hog(x,:) = extractHOGFeatures(cells{i,j});
                     x = x + 1;
                    % rgbHisto(i,j) = RGBhistogram(cells{i,j});
-                    end
                 end
             else
-                %El principi del Tile esta dins la selecio, mirem si el
-                %final també ho esta
-                if ((i>=userBox(1) && j>=userBox(2)) && (i>=userBox(1) + userBox(3) && j>=userBox(2)+userBox(4))) 
                 %Foreground
                 labels(x) = "Foreground";
                 hog(x,:) = extractHOGFeatures(cells{i,j});
@@ -67,7 +53,7 @@ function [] = detector2(I)
         end
     end
     %Entrenem
-    %hogF = hog(:);
+    hogF = hog(:);
     clasificador = fitcecoc(hog,labels);
     [label,score,cost] = predict(clasificador,hog);
     reimage = zeros(2048,2048);

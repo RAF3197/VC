@@ -1,5 +1,5 @@
 function [] = detector2(I)
-    imshow(I);
+imshow(I);
     h = imrect; %draw something 
     userBox = h.getPosition
     delete(h);
@@ -27,9 +27,9 @@ function [] = detector2(I)
     rgbHisto = zeros(64,64);
     for i = 1:cellRows
         for j = 1:cellCols
-            if ((i<=userBox(1) && j<=userBox(2)) || (i>=userBox(1) + userBox(3) && j>=userBox(2)+userBox(4)))
+            if ((i<userBox(1) && j<userBox(2)) || (i>userBox(1) + userBox(3) && j>userBox(2)+userBox(4)))
                 %Backgroud
-                if((i*64<=userBox(1) && j*64<=userBox(2)) || (i*64>=userBox(1) + userBox(3) && j*64>=userBox(2)+userBox(4)))
+                if((i*64<userBox(1) && j*64<userBox(2)) || (i*64>userBox(1) + userBox(3) && j*64>userBox(2)+userBox(4)))
                     %Background
                     labels(x) = "Background";
                     hog(x,:) = extractHOGFeatures(cells{i,j});
@@ -37,8 +37,6 @@ function [] = detector2(I)
                     %rgbHisto(i,j) = RGBhistogram(cells{i,j});
 %                    imshow(cells{i,j});
                 else
-                    %Si Tile no esta sancera fora de la selecio, veiem si
-                    %la majoria esta dins o fora
                     if((i*32<=userBox(1) && j*32<=userBox(2)) || (i*32>=userBox(1) + userBox(3) && j*32>=userBox(2)+userBox(4)))
                         %Background
                     labels(x) = "Background";
@@ -55,9 +53,6 @@ function [] = detector2(I)
                     end
                 end
             else
-                %El principi del Tile esta dins la selecio, mirem si el
-                %final també ho esta
-                if ((i>=userBox(1) && j>=userBox(2)) && (i>=userBox(1) + userBox(3) && j>=userBox(2)+userBox(4))) 
                 %Foreground
                 labels(x) = "Foreground";
                 hog(x,:) = extractHOGFeatures(cells{i,j});
