@@ -16,17 +16,17 @@ gHist = imhist(I(:,:,2), nBins);
 bHist = imhist(I(:,:,3), nBins);
 
 %RGBHIST Histogram Plot
-hFig = figure;
-
-subplot(2,1,1); 
-imshow(I); 
-title('Input image');
-
-subplot(2,1,2);
-h(1) = area(1:nBins, rHist, 'FaceColor', 'r'); hold on; 
-h(2) = area(1:nBins, gHist,  'FaceColor', 'g'); hold on; 
-h(3) = area(1:nBins, bHist,  'FaceColor', 'b'); hold on; 
-title('RGB image histogram');
+% hFig = figure;
+% 
+% subplot(2,1,1); 
+% imshow(I); 
+% title('Input image');
+% 
+% subplot(2,1,2);
+% h(1) = area(1:nBins, rHist, 'FaceColor', 'r'); hold on; 
+% h(2) = area(1:nBins, gHist,  'FaceColor', 'g'); hold on; 
+% h(3) = area(1:nBins, bHist,  'FaceColor', 'b'); hold on; 
+% title('RGB image histogram');
 rgbH = zeros(3,256);
 rgbH(1,:) = rHist;
 rgbH(2,:) = gHist;

@@ -26,17 +26,17 @@ function [] = detector2(I)
     labels = zeros(1, 64 * 64);
     [hogRows, hogCols] = size(hog2);
     hog = zeros(64 * 64, hogCols);
+    color = zeros(64*64,1);
     labels = repelem("Background", 64 * 64);
     %[freq, freq_emph, freq_app] = image_hist_RGB_3d(cells{1,1});
     % rgb = histRGB(cells{1,1});
-    rgbHisto = zeros(64, 64);
     
     SX = userBox(1);
     SY = userBox(2);
-    SXMax = userBox(1)+userBox(4);
-    SYMax = userBox(2)+userBox(3);
+    SXMax = userBox(1)+userBox(3);
+    SYMax = userBox(2)+userBox(4);
     
-    z=1;
+    z=0;
     
     for i = 1:cellRows
         for j = 1:cellCols
@@ -44,8 +44,11 @@ function [] = detector2(I)
             l = 1;
             x = (i-1)*64+l;
             y = (j-1)*64+k;
+            z = z + 1;
             hog(z, :) = extractHOGFeatures(cells{i, j});
-            if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax)
+            result = histRGB(cells{i, j});
+            color(z,:)=mean(mean(result(1))+mean(result(2))+mean(result(3)));
+            if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax )
                 %Punt minim caixa fora selecio
                 labels(z) = "Foreground";
             end
@@ -61,7 +64,7 @@ function [] = detector2(I)
              l = 1;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax)
+             if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax )
                  labels(z) = "Foreground";
                  %Y max fora
              end
@@ -69,34 +72,35 @@ function [] = detector2(I)
              l = 64;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax)
+             if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax )
                  labels(z) = "Foreground";
              end
-            z = z + 1;
         end
     end
 %     labels(65) = "Foreground";
-%     x = 0;
-%     for i=1:64
-%         for j=1:64
-%             x = x + 1; 
-%             for k = 1:64
-%                 for l = 1:64
-%                     if labels(x) == "Foreground"
-%                     IM((i-1)*64+l,(j-1)*64+k,1) = 0;
-%                     IM((i-1)*64+l,(j-1)*64+k,2) = 0;
-%                     IM((i-1)*64+l,(j-1)*64+k,3) = 0;
-%                     end
-%                 end
-%             end
-%         end
-%     end
-    figure;
-    imshow(IM);
+    
     %Entrenem
     %hogF = hog(:);
+    HOLA = [hog color];
     clasificador = fitcecoc(hog, labels);
     [label, score, cost] = predict(clasificador, hog);
+    x = 0;
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if label(x) == "Foreground"
+                    IM((i-1)*64+l,(j-1)*64+k,1) = 256;
+%                     IM((i-1)*64+l,(j-1)*64+k,2) ;
+%                     IM((i-1)*64+l,(j-1)*64+k,3) = 0;
+                    end
+                end
+            end
+        end
+    end
+    figure;
+    imshow(IM);
     reimage = zeros(4096, 4096);
 %     figure;
 %     res = zeros(4096,4096,3,'uint8');
