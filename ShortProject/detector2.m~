@@ -44,7 +44,7 @@ function [] = detector2(I)
             l = 1;
             x = (i-1)*64+l;
             y = (j-1)*64+k;
-            hog(z, :) = extractHOGFeatures(cells{i, j});
+%             hog(z, :) = extractHOGFeatures(cells{i, j});
             if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax)
                 %Punt minim caixa fora selecio
                 labels(z) = "Foreground";
@@ -61,7 +61,7 @@ function [] = detector2(I)
              l = 1;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax)
+             if (x>userBox(1) && y>userBox(2) && y<SXMax && y< SYMax)
                  labels(z) = "Foreground";
                  %Y max fora
              end
@@ -69,28 +69,28 @@ function [] = detector2(I)
              l = 64;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (x>userBox(1) && y>userBox(2) && x<SXMax && y< SYMax)
+             if (x>userBox(1) && y>userBox(2) && y<SXMax && x< SYMax)
                  labels(z) = "Foreground";
              end
             z = z + 1;
         end
     end
-%     labels(65) = "Foreground";
-%     x = 0;
-%     for i=1:64
-%         for j=1:64
-%             x = x + 1; 
-%             for k = 1:64
-%                 for l = 1:64
-%                     if labels(x) == "Foreground"
-%                     IM((i-1)*64+l,(j-1)*64+k,1) = 0;
-%                     IM((i-1)*64+l,(j-1)*64+k,2) = 0;
-%                     IM((i-1)*64+l,(j-1)*64+k,3) = 0;
-%                     end
-%                 end
-%             end
-%         end
-%     end
+    labels(65) = "Foreground";
+    x = 0;
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if labels(x) == "Foreground"
+                    IM((i-1)*64+l,(j-1)*64+k,1) = 0;
+                    IM((i-1)*64+l,(j-1)*64+k,2) = 0;
+                    IM((i-1)*64+l,(j-1)*64+k,3) = 0;
+                    end
+                end
+            end
+        end
+    end
     figure;
     imshow(IM);
     %Entrenem
@@ -122,33 +122,33 @@ function [] = detector2(I)
     %Posem els labels en una matriu de 64x64
     matRef = reshape(label,64,64);
 %    IM2 = zeros(64*64,64*64,3,'uint8');
-%     for i = 1:64
-%         for j = 1:64
-%             if matRef(i,j) == "Background"
-%                 for k = 1:64
-%                     for l = 1:64
-%                         imshow(IM(i*k,l*j));
-%                        
-% %                         IM=insertMarker(IM,[i*k j*l],'x','size',64);
-%                     end
-%                 end
-%             else
-%                 for k = 1:64
-%                     for l = 1:64
-% %                         IM(k,l,1)=0;
-% %                         IM(k,l,2)=0;
-% %                         IM(k,l,3)=0;
-%                         %IM(k+i,l+j,:,:)=0;
-%                        % IM(k+i,l+j,3)=0;
-%                        
-%                     end
-%                 end
-%             end
-%         end
-%     end
+    for i = 1:64
+        for j = 1:64
+            if matRef(i,j) == "Background"
+                for k = 1:64
+                    for l = 1:64
+                        imshow(IM(i*k,l*j));
+                       
+%                         IM=insertMarker(IM,[i*k j*l],'x','size',64);
+                    end
+                end
+            else
+                for k = 1:64
+                    for l = 1:64
+%                         IM(k,l,1)=0;
+%                         IM(k,l,2)=0;
+%                         IM(k,l,3)=0;
+                        %IM(k+i,l+j,:,:)=0;
+                       % IM(k+i,l+j,3)=0;
+                       
+                    end
+                end
+            end
+        end
+    end
     %Histograma de color
-%     figure;
-%     imshow(IM);
+    figure;
+    imshow(IM);
     red = I(:, :, 1);
     blue = I(:, :, 2);
     green = I(:, :, 3);
