@@ -28,6 +28,7 @@ function [] = detector2(I)
     %[freq, freq_emph, freq_app] = image_hist_RGB_3d(cells{1,1});
     % rgb = histRGB(cells{1,1});
     rgbHisto = zeros(64, 64);
+    
     for i = 1:cellRows
         for j = 1:cellCols
             if ((i <= userBox(1) && j <= userBox(2)) || (i >= userBox(1) + userBox(3) && j >= userBox(2) + userBox(4)))
@@ -95,6 +96,17 @@ function [] = detector2(I)
             end
         end
     end
+    for i=1:64
+        for j=1:64
+            for k = 1:64
+                for l = 1:64
+                    IM((i-1)*64+j,(k-1)*64+l,1)=0;
+                    IM((i-1)*64+j,(k-1)*64+l,2)=0;
+                    IM((i-1)*64+j,(k-1)*64+l,3)=0;
+                end
+            end
+        end
+    end
     figure;
     imshow(IM);
     %Entrenem
@@ -126,7 +138,6 @@ function [] = detector2(I)
     %Posem els labels en una matriu de 64x64
     matRef = reshape(label,64,64);
 %    IM2 = zeros(64*64,64*64,3,'uint8');
-figure;
     for i = 1:64
         for j = 1:64
             if matRef(i,j) == "Background"
