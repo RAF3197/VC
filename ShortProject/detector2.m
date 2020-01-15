@@ -38,11 +38,11 @@ function [] = detector2(I)
             x = (i-1)*64+l;
             y = (j-1)*64+k;
             z = z + 1;
-            hog(z, :) = extractHOGFeatures(cells{i, j});
-            hog2(z,:) = extractHOGFeatures(cells2{i, j});
+         %   hog(z, :) = extractHOGFeatures(cells{i, j});
+         %   hog2(z,:) = extractHOGFeatures(cells2{i, j});
 %             result = histRGB(cells{i, j});
 %             color(z,:)=mean(mean(result(1))+mean(result(2))+mean(result(3)));
-            if (x>SX && y>SY && x<SXMax && y< SYMax )
+            if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
                 %Punt minim caixa fora selecio
                 labels(z) = "Foreground";
             end
@@ -50,7 +50,7 @@ function [] = detector2(I)
             l = 64;
             x = (i-1)*64+l;
             y = (j-1)*64+k;
-            if (x>SX && y>SY && x<SXMax && y< SYMax )
+            if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
                 %X maxima caixa fora selecio
                 labels(z) = "Foreground";
             end
@@ -58,7 +58,7 @@ function [] = detector2(I)
              l = 1;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (x>SX && y>SY && x<SXMax && y< SYMax )
+             if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
                  labels(z) = "Foreground";
                  %Y max fora
              end
@@ -66,13 +66,13 @@ function [] = detector2(I)
              l = 64;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (x>SX && y>SY && x<SXMax && y< SYMax )
+             if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
                  labels(z) = "Foreground";
              end
         end
     end
     
-    
+    x = 0;
     for i=1:64
         for j=1:64
             x = x + 1; 
