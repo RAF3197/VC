@@ -15,6 +15,7 @@ function [] = detector2(I)
     [hogRows, hogCols] = size(hog2);
     hog = zeros(cellCols * cellRows, hogCols);
     color = zeros(cellCols * cellRows,1);
+    color2 = zeros(cellCols * cellRows,1);
     labels = repelem("Background", cellCols * cellRows);
     
     SX = userBox(1);
@@ -38,11 +39,13 @@ function [] = detector2(I)
             x = (i-1)*64+l;
             y = (j-1)*64+k;
             z = z + 1;
-         %   hog(z, :) = extractHOGFeatures(cells{i, j});
-         %   hog2(z,:) = extractHOGFeatures(cells2{i, j});
-%             result = histRGB(cells{i, j});
-%             color(z,:)=mean(mean(result(1))+mean(result(2))+mean(result(3)));
-            if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
+            hog(z, :) = extractHOGFeatures(cells{i, j});
+            hog2(z,:) = extractHOGFeatures(cells2{i, j});
+            result = histRGB(cells{i, j});
+            color(z,:)=mean(mean(result(1))+mean(result(2))+mean(result(3)));
+            result = histRGB(cells2{i, j});
+            color2(z,:)=mean(mean(result(1))+mean(result(2))+mean(result(3)));
+            if (y>SX && x>SY && y<SXMax && x< SYMax  )
                 %Punt minim caixa fora selecio
                 labels(z) = "Foreground";
             end
@@ -50,7 +53,7 @@ function [] = detector2(I)
             l = 64;
             x = (i-1)*64+l;
             y = (j-1)*64+k;
-            if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
+            if (y>SX && x>SY && y<SXMax && x< SYMax  )
                 %X maxima caixa fora selecio
                 labels(z) = "Foreground";
             end
@@ -58,7 +61,7 @@ function [] = detector2(I)
              l = 1;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
+             if (y>SX && x>SY && y<SXMax && x< SYMax )
                  labels(z) = "Foreground";
                  %Y max fora
              end
@@ -66,7 +69,7 @@ function [] = detector2(I)
              l = 64;
              x = (i-1)*64+l;
              y = (j-1)*64+k;
-             if (y>SX && x>SY && y<SXMax && x< SYMax && y<userBox(4) && x<userBox(3) )
+             if (y>SX && x>SY && y<SXMax && x< SYMax )
                  labels(z) = "Foreground";
              end
         end
@@ -93,8 +96,8 @@ function [] = detector2(I)
     
     
 %     
-    clasificador = fitcecoc(hog, labels);
-    [label, score, cost] = predict(clasificador, hog);
+    clasificador = fitcecoc([hog color], labels);
+    [label, score, cost] = predict(clasificador, [hog color]);
     x = 0;
     for i=1:64
         for j=1:64
@@ -112,7 +115,7 @@ function [] = detector2(I)
     end
     figure;
     imshow(IM);
-    [label, score, cost] = predict(clasificador, hog2);
+    [label, score, cost] = predict(clasificador,[hog2 color2]);
     x = 0;
     for i=1:64
         for j=1:64
