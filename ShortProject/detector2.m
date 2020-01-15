@@ -96,7 +96,7 @@ function [] = detector2(I)
     
     
 %     
-    clasificador = fitcecoc([hog color], labels);
+    clasificador = fitcecoc([hog color], labels, "Prior", [15,8]);
     [label, score, cost] = predict(clasificador, [hog color]);
     x = 0;
     for i=1:64
