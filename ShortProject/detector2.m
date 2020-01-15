@@ -30,7 +30,7 @@ function [] = detector2(I)
     hog2 = extractHOGFeatures(cells2{1, 1});
     [cell2Rows,cell2Cols] = size(hog2);
     hog2 = zeros(64*64,cell2Cols);
-    
+    aux = IM;
     for i = 1:cellRows
         for j = 1:cellCols
             k = 1;
@@ -71,6 +71,27 @@ function [] = detector2(I)
              end
         end
     end
+    
+    
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if labels(x) == "Foreground"
+                    aux((i-1)*64+l,(j-1)*64+k,1) = 256;
+%                     IM((i-1)*64+l,(j-1)*64+k,2) ;
+%                     IM((i-1)*64+l,(j-1)*64+k,3) = 0;
+                    end
+                end
+            end
+        end
+    end
+    figure;
+    title("Prediction");
+    imshow(aux);
+    
+    
 %     
     clasificador = fitcecoc(hog, labels);
     [label, score, cost] = predict(clasificador, hog);
