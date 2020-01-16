@@ -1,5 +1,4 @@
-function [outputArg1,outputArg2] = detector4(inputArg1,inputArg2)
-function [] = detector2(I)
+function [] = detector4(I)
     close all;
     IM = imresize(I, [4096, 4096]);
     imshow(IM);
@@ -15,8 +14,12 @@ function [] = detector2(I)
     labels = zeros(1, cellCols * cellRows);
     [hogRows, hogCols] = size(hog2);
     hog = zeros(cellCols * cellRows, hogCols);
-    color = zeros(cellCols * cellRows,1);
-    color2 = zeros(cellCols * cellRows,1);
+    colorR = zeros(cellCols * cellRows,256);
+    colorG = zeros(cellCols * cellRows,256);
+    colorB = zeros(cellCols * cellRows,256);
+    color2R = zeros(cellCols * cellRows,256);
+    color2G = zeros(cellCols * cellRows,256);
+    color2B = zeros(cellCols * cellRows,256);
     labels = repelem("Background", cellCols * cellRows);
     
     SX = userBox(1);
@@ -26,9 +29,9 @@ function [] = detector2(I)
     
     z=0;
     
-    IM2 = imread('Snow2.png');
+    IM2 = imread('Eagle2.png');
     IM2 = imresize(IM2, [4096, 4096]);
-    cells2 = mat2tiles(IM, [64, 64]);
+    cells2 = mat2tiles(IM2, [64, 64]);
     hog2 = extractHOGFeatures(cells2{1, 1});
     [cell2Rows,cell2Cols] = size(hog2);
     hog2 = zeros(64*64,cell2Cols);
@@ -44,9 +47,13 @@ function [] = detector2(I)
             hog(z, :) = extractHOGFeatures(cells{i, j});
             hog2(z,:) = extractHOGFeatures(cells2{i, j});
             result = histRGB(cells{i, j});
-            color(z,:)=mean(mean(result(1))+mean(result(2))+mean(result(3)));
-             result = histRGB(cells2{i, j});
-             color2(z,:)=mean(mean(result(1))+mean(result(2))+mean(result(3)));
+            colorR(z,:)=result(1);
+            colorG(z,:)=result(2);
+            colorB(z,:)=result(3);
+            result = histRGB(cells2{i, j});
+            color2R(z,:)=result(1);
+            color2G(z,:)=result(2);
+            color2B(z,:)=result(3);
             if (y>SX && x>SY && y<SXMax && x< SYMax  )
                 %Punt minim caixa fora selecio
                 labels(z) = "Foreground";
@@ -83,34 +90,33 @@ function [] = detector2(I)
     end
     %Obtenim la informacio de color del fons 
     x=0;
-    backColors = 0;
+    backColorsR = zeros(backHogs,256);
+    backColorsG = zeros(backHogs,256);
+    backColorsB = zeros(backHogs,256);
     firstB = 1;
 %     firstF = 1;
 %     color3 = 0;
     hog3It = 1;
 %     hog4It = 1;
+backColorIt = 1;
     hog3 = zeros(backHogs,hogCols);
 %     hog4 = zeros(4096-backHogs,hogCols);
     for i = 1:cellRows
         for j = 1:cellCols
             x=x+1;
             if labels(x) == "Background"
-                if firstB == 1
-                firstB = 0;
-                backColors = color(x);
+                backColorsR(backColorIt,:) = colorR(x,:);
+                backColorsG(backColorIt,:) = colorG(x,:);
+                backColorsB(backColorIt,:) = colorB(x,:);
+                backColorIt = backColorIt +1;
 %               hog3(hog3It) = hog(x);
 %               hog3It = hog3It + 1;
-                else
-                    backColors = [backColors color(x)];
-                    hog3(hog3It) = hog(x);
-                    hog3It = hog3It + 1;
-                end
             end
         end
     end
 %     %color3 -> color de fons
 %     %color4 -> color de interes
-    [rowsColorBack,columnsColorBack] = size(backColors);
+    [rowsColorBack,columnsColorBack] = size(backColorsR);
     x = 0;
     for i=1:64
         for j=1:64
@@ -119,7 +125,8 @@ function [] = detector2(I)
                 k = 1;
                 trobat = 0;
                 while (k< columnsColorBack && trobat == 0)
-                    if color(x) == backColors(k) && hog3(k) == hog(x)
+                    a = ((sum(backColorsR(k,:)) +  sum(backColorsB(k,:)) + sum(backColorsG(k,:)))) - (sum(colorR(x,:)) +  sum(colorB(x,:)) + sum(colorG(x,:)));
+                    if hog3(k) == hog(x) && (-20 <= a || a >= 20)
                         labels(x) = "Background";
                         trobat=1;
                     end
@@ -148,9 +155,9 @@ function [] = detector2(I)
     imshow(aux);
     
     
-    clasificador = fitcecoc([hog color], labels,"Prior",[3,15]);
+    clasificador = fitcecoc([hog colorR colorG colorB ], labels);
 %     clasificador = fitcecoc(hog, labels);
-    [label, score, cost] = predict(clasificador, [hog color]);
+    [label, score, cost] = predict(clasificador, [hog colorR colorG colorB ]);
     x = 0;
     for i=1:64
         for j=1:64
@@ -168,14 +175,14 @@ function [] = detector2(I)
     end
     figure;
     imshow(IM);
-    [label, score, cost] = predict(clasificador,[hog2 color2]);
+    [label2, score, cost] = predict(clasificador,[hog2 color2R color2G color2B]);
     x = 0;
     for i=1:64
         for j=1:64
             x = x + 1; 
             for k = 1:64
                 for l = 1:64
-                    if label(x) == "Foreground"
+                    if label2(x) == "Foreground"
                     IM2((i-1)*64+l,(j-1)*64+k,1) = 256;
 %                     IM((i-1)*64+l,(j-1)*64+k,2) ;
 %                     IM((i-1)*64+l,(j-1)*64+k,3) = 0;
