@@ -29,7 +29,7 @@ function [] = detector4(I)
     
     z=0;
     
-    IM2 = imread('Snow2.png');
+    IM2 = imread('golf2.png');
     IM2 = imresize(IM2, [4096, 4096]);
     cells2 = mat2tiles(IM2, [64, 64]);
     hog2 = extractHOGFeatures(cells2{1, 1});
@@ -88,6 +88,23 @@ function [] = detector4(I)
              end
         end
     end
+%     Veiem la interpretacio de la selecio
+aux = IM;
+        x = 0;
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if labels(x) == "Foreground"
+                   aux((i-1)*64+l,(j-1)*64+k,1) = 256;
+                    end
+                end
+            end
+        end
+    end
+    figure;
+    imshow(aux);
     %Obtenim la informacio de color del fons 
     x=0;
     backColorsR = zeros(backHogs,256);
@@ -135,7 +152,7 @@ backColorIt = 1;
             end
         end
     end
-    
+    aux = IM;
     x = 0;
     for i=1:64
         for j=1:64
@@ -158,23 +175,22 @@ backColorIt = 1;
     clasificador = fitcecoc([hog colorR colorG colorB ], labels);
 %     clasificador = fitcecoc(hog, labels);
     [label, score, cost] = predict(clasificador, [hog colorR colorG colorB ]);
-%     x = 0;
-%     for i=1:64
-%         for j=1:64
-%             x = x + 1; 
-%             for k = 1:64
-%                 for l = 1:64
-%                     if label(x) == "Foreground"
-%                     IM((i-1)*64+l,(j-1)*64+k,1) = 0;
-%                     IM((i-1)*64+l,(j-1)*64+k,2) = 0  ;
-%                     IM((i-1)*64+l,(j-1)*64+k,3) = 0;
-%                     end
-%                 end
-%             end
-%         end
-%     end
-%     figure;
-%     imshow(IM);
+    aux = IM;
+    x = 0;
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if label(x) == "Foreground"
+                    aux((i-1)*64+l,(j-1)*64+k,1) = 256;
+                    end
+                end
+            end
+        end
+    end
+    figure;
+    imshow(aux);
     
     %Binaritzem i eliminem soroll 
     
@@ -201,38 +217,56 @@ backColorIt = 1;
         end
     end
 
-%     BW = imbinarize(IMGray,'global');
-figure;
-    imshow(IMGray);
-%     IMGray = imcrop(IMGray,userBox);
+% figure;
+%     imshow(IMGray);
     
     BW = bwareaopen(IMGray,64 * 64 * 64,18);
-    figure;
-    imshow(BW);
-    se = strel('disk',8);
+%     figure;
+%     imshow(BW);
+    se = strel('disk',5);
     closeBW = imclose(BW,se); figure, imshow(closeBW)
-    %a = bwconncomp(closeBW,18);
-    a = bwareafilt(closeBW,1);
+    closeCells = mat2tiles(closeBW, [64, 64]);
+    x = 0;
+    for i = 1:64
+        for j = 1:64
+            x = x+1;
+            res = closeCells{i,j};
+            if sum(res(:,:)) == 0
+                label(x) = {"Foreground"};
+            else
+                label(x) = {"Background"};
+            end
+        end
+    end
     
+        x = 0;
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if label{x} == "Foreground"
+                    IM((i-1)*64+l,(j-1)*64+k,1) = 256;
+                    end
+                end
+            end
+        end
+    end
     figure;
-    imshow(a);
+    imshow(IM);
     
-    BW2 = bwareafilt(closeBW);
-    figure;
-    imshow(BW2)
-    
-    %Reseguim amb un Marker la CC + gran que trobem en la imatge.
     
     
     [label2, score, cost] = predict(clasificador,[hog2 color2R color2G color2B]);
     x = 0;
+    aux = IM2;
     for i=1:64
         for j=1:64
             x = x + 1; 
             for k = 1:64
                 for l = 1:64
                     if label2(x) == "Foreground"
-                    IM2((i-1)*64+l,(j-1)*64+k,1) = 256;
+                    aux((i-1)*64+l,(j-1)*64+k,1) = 256;
 %                     IM((i-1)*64+l,(j-1)*64+k,2) ;
 %                     IM((i-1)*64+l,(j-1)*64+k,3) = 0;
                     end
@@ -242,7 +276,68 @@ figure;
     end
     figure;
     title("Prediction");
-    imshow(IM2);
+    imshow(aux);
+    
+    
+    aux = IM2;
+    IMGray = rgb2gray(aux);
+    fores = 0;
+        x = 0;
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if label2{x} == "Foreground"
+                    IMGray((i-1)*64+l,(j-1)*64+k) = 0;
+                    fores = fores + 1;
+                    else
+                    IMGray((i-1)*64+l,(j-1)*64+k) = 256;
+                    end
+                    
+                end
+            end
+        end
+    end
+
+% figure;
+%     imshow(IMGray);
+    
+    BW = bwareaopen(IMGray,64 * 64 * 64,18);
+%     figure;
+%     imshow(BW);
+    se = strel('disk',5);
+    closeBW = imclose(BW,se); figure, imshow(closeBW)
+    closeCells = mat2tiles(closeBW, [64, 64]);
+    x = 0;
+    for i = 1:64
+        for j = 1:64
+            x = x+1;
+            res = closeCells{i,j};
+            if sum(res(:,:)) == 0
+                label2(x) = {"Foreground"};
+            else
+                label2(x) = {"Background"};
+            end
+        end
+    end
+    
+        x = 0;
+    for i=1:64
+        for j=1:64
+            x = x + 1; 
+            for k = 1:64
+                for l = 1:64
+                    if label2{x} == "Foreground"
+                    aux((i-1)*64+l,(j-1)*64+k,1) = 256;
+                    end
+                end
+            end
+        end
+    end
+    figure;
+    
+    imshow(aux);
     
 end
 
